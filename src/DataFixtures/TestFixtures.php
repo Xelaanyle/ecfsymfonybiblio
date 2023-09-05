@@ -52,16 +52,21 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
         $this->manager = $manager;
         $this->loadGenres();
+        $this->loadAuteurs();
         $this->loadLivres();
-        // $this->loadAuteurs();
         // $this->loadEmrprunts();
         // $this->loadEmprunteurs();
     }
 
     public function loadLivres()
     {
+
+
         $repoEmprunt = $this->manager->getRepository(Emprunt::class);
-        $emprunt = $repoGenres->findAll();
+        $emprunts = $repoEmprunt->findAll();
+        $emprunt1 = $repoEmprunt->find(1);
+        $emprunt2 = $repoEmprunt->find(2);
+        $emprunt3 = $repoEmprunt->find(3);
 
         $repoGenres = $this->manager->getRepository(Genre::class);
         $genres = $repoGenres->findAll();
@@ -79,25 +84,25 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
                 'nombrePage' => 100,
                 'codeIsbn' => null,
                 'genres' => [$manga],
-                // 'emprunt' => [],
+                // 'emprunt' => [$emprunt1],
                 'auteur' => null,
             ],
             [
                 'titre' => 'Arsène lupin',
-                'anneeEdition' => '2000',
-                'nombrePage' => 'Toto',
+                'anneeEdition' => 2000,
+                'nombrePage' => 150,
                 'codeIsbn' => null,
-                'genres' => [$policier],
-                // 'emprunt' => [],
+                'genres' => [$policier, $sf],
+                // 'emprunt' => [$emprunt2],
                 'auteur' => null,
             ],
             [
                 'titre' => 'Starfield',
-                'anneeEdition' => null,
-                'nombrePage' => 'Toto',
+                'anneeEdition' => 2020,
+                'nombrePage' => 300,
                 'codeIsbn' => null,
                 'genres' => [$sf],
-                // 'emprunt' => [],
+                // 'emprunt' => [$emprunt3],
                 'auteur' => null,
             ],
         ];
@@ -106,16 +111,20 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
         foreach ($datas as $data) {
             $livre = new Livre();
-            $livre->setName($data['name']);
-            $livre->setDescription($data['description']);
-            $livre->setClientName($data['clientName']);
-            $livre->setStartDate($data['startDate']);
-            $livre->setCheckpointDate($data['checkpointDate']);
-            $livre->setDeliveryDate($data['deliveryDate']);
+            $livre->setTitre($data['titre']);
+            $livre->setAnneeEdition($data['anneeEdition']);
+            $livre->setNombrePage($data['nombrePage']);
+            $livre->setCodeIsbn($data['codeIsbn']);
+
+            // foreach ($data['emprunt'] as $emprunt) {
+            //     $livre->addEmprunt($emprunt);
+            // }
 
             foreach ($data['genres'] as $genre) {
                 $livre->addGenre($genre);
             }
+
+            $livre->setAuteur($data['auteur']);
 
             $this->manager->persist($livre);
         }
@@ -124,30 +133,35 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
         // données dynamique
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $livre = new Livre();
             $words = random_int(1, 2);
-            $livre->setName($this->faker->sentence($words));
-            $words = random_int(2, 10);
-            $livre->setDescription($this->faker->optional(0.7)->sentence($words));
-            $livre->setClientName($this->faker->name());
-            $startDate = $this->faker->dateTimeBetween('-1 year', '-8months');
-            $livre->setStartDate($startDate);
-            $checkpointDate = $this->faker->dateTimeBetween('-7 months', '-2months');
-            $livre->setCheckpointDate($checkpointDate);
-            $deliveryDate = $this->faker->dateTimeBetween('-1 months', 'now');
-            $livre->setDeliveryDate($deliveryDate);
+            $livre->setTitre($this->faker->sentence($words));
+            $livre->setAnneeEdition($this->faker->numberBetween(1970, 2000));
+            $livre->setNombrePage($this->faker->numberBetween(50, 400));
+            $livre->setCodeIsbn($this->faker->optional(0.5)->numberBetween(100, 100000));
 
             // on choisit le nombre de tags au hasard entre 1 et 4
-            $tagsCount = random_int(1, 4);
+            $genreCount = random_int(1, 3);
             // on choisit des tags au hasard depuis la liste complète
-            $shortList = $this->faker->randomElements($tags, $tagsCount);
+            $genreList = $this->faker->randomElements($genres, $genreCount);
 
             // on passe revue chaque tag de la short list
-            foreach ($shortList as $tag) {
+            foreach ($genreList as $genre) {
                 // on associe un tag avec le projet
-                $livre->addTag($tag);
+                $livre->addGenre($genre);
             }
+
+            // foreach ($genreList as $emprunt) {
+            //     // on associe un tag avec le projet
+            //     $livre->addEmprunt($emprunt);
+            // }
+
+            $repoAuteur = $this->manager->getRepository(Auteur::class);
+            $auteurs = $repoAuteur->findAll();
+            $auteur = $this->faker->randomElement($auteurs);
+
+            $livre->setAuteur($auteur);
 
             $this->manager->persist($livre);
         }
@@ -155,101 +169,47 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
         $this->manager->flush();
     }
 
-    // public function loadAuteurs()
-    // {
-    //     $repoTags = $this->manager->getRepository(Tag::class);
-    //     $tags = $repoTags->findAll();
-    //     // $this->faker->randomElement($tags);
+    public function loadAuteurs()
+    {
+        $datas = [
+            [
+                'nom' => 'Sebastien',
+                'prenom' => 'Bar',
+            ],
+            [
+                'nom' => 'Daishi',
+                'prenom' => 'Baz',
+            ],
+            [
+                'nom' => 'Foo',
+                'prenom' => 'Alice',
+            ],
+        ];
 
-    //     // on récupère un tag a partir de son id
-    //     $htmlTag = $repoTags->find(1);
-    //     $cssTag = $repoTags->find(2);
+        // données statique 
 
-    //     // on récupère 
-    //     $jsTag = $tags[2];
+        foreach ($datas as $data) {
+            $auteur = new Auteur();
+            $auteur->setNom($data['nom']);
+            $auteur->setPrenom($data['prenom']);
 
-    //     $datas = [
-    //         [
-    //             'name' => 'P11',
-    //             'description' => null,
-    //             'clientName' => 'Toto',
-    //             'startDate' => new DateTime('2022-01-01'),
-    //             'checkpointDate' => new DateTime('2022-06-01'),
-    //             'deliveryDate' => new DateTime('2023-01-01'),
-    //             'tags' => [$htmlTag],
-    //         ],
-    //         [
-    //             'name' => 'P12',
-    //             'description' => null,
-    //             'clientName' => 'Titi',
-    //             'startDate' => new DateTime('2022-01-01'),
-    //             'checkpointDate' => new DateTime('2022-06-01'),
-    //             'deliveryDate' => new DateTime('2023-01-01'),
-    //             'tags' => [$cssTag],
-    //         ],
-    //         [
-    //             'name' => 'P13',
-    //             'description' => null,
-    //             'clientName' => 'Tata',
-    //             'startDate' => new DateTime('2022-01-01'),
-    //             'checkpointDate' => new DateTime('2022-06-01'),
-    //             'deliveryDate' => new DateTime('2023-01-01'),
-    //             'tags' => [$jsTag],
-    //         ],
-    //     ];
+            $this->manager->persist($auteur);
+        }
 
-    //     // données statique 
+        $this->manager->flush();
 
-    //     foreach ($datas as $data) {
-    //         $project = new Auteur();
-    //         $project->setName($data['name']);
-    //         $project->setDescription($data['description']);
-    //         $project->setClientName($data['clientName']);
-    //         $project->setStartDate($data['startDate']);
-    //         $project->setCheckpointDate($data['checkpointDate']);
-    //         $project->setDeliveryDate($data['deliveryDate']);
+            // données dynamique
 
-    //         foreach ($data['tags'] as $tag) {
-    //             $project->addTag($tag);
-    //         }
+            for ($i = 0; $i < 500; $i++) {
+                $project = new Auteur();
+                $project->setNom($this->faker->firstName());
+                $project->setPrenom($this->faker->lastName());
+     
+                $this->manager->persist($project);
+            }
 
-    //         $this->manager->persist($project);
-    //     }
-
-    //     $this->manager->flush();
-
-    //     // données dynamique
-
-    //     for ($i = 0; $i < 30; $i++) {
-    //         $project = new Auteur();
-    //         $words = random_int(1, 2);
-    //         $project->setName($this->faker->sentence($words));
-    //         $words = random_int(2, 10);
-    //         $project->setDescription($this->faker->optional(0.7)->sentence($words));
-    //         $project->setClientName($this->faker->name());
-    //         $startDate = $this->faker->dateTimeBetween('-1 year', '-8months');
-    //         $project->setStartDate($startDate);
-    //         $checkpointDate = $this->faker->dateTimeBetween('-7 months', '-2months');
-    //         $project->setCheckpointDate($checkpointDate);
-    //         $deliveryDate = $this->faker->dateTimeBetween('-1 months', 'now');
-    //         $project->setDeliveryDate($deliveryDate);
-
-    //         // on choisit le nombre de tags au hasard entre 1 et 4
-    //         $tagsCount = random_int(1, 4);
-    //         // on choisit des tags au hasard depuis la liste complète
-    //         $shortList = $this->faker->randomElements($tags, $tagsCount);
-
-    //         // on passe revue chaque tag de la short list
-    //         foreach ($shortList as $tag) {
-    //             // on associe un tag avec le projet
-    //             $project->addTag($tag);
-    //         }
-
-    //         $this->manager->persist($project);
-    //     }
-
-    //     $this->manager->flush();
-    // }
+            $this->manager->flush();
+    }
 
 
 
@@ -361,7 +321,7 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $words = random_int(8, 15);
             $genre->setDescription($this->faker->sentence($words));
 
-            
+
             $livresCount = random_int(1, 2);
             // on choisit des tags au hasard depuis la liste complète
             // $shortList = $this->faker->randomElements($livres, $livresCount);
