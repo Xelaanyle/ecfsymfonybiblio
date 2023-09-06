@@ -15,21 +15,6 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as FakerFactory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-// $repotags = $this->manager->getRepository(Tag::class);
-// $ltags = $repotags->finAll();
-// $this->faker->randomElement($ltags);
-
-// $htmlTag = $repository->find(1);
-// $cssTag = $repository->find(2);
-// $jslTag = $repository->find(3);
-
-// éléments de code réutiliser dans vos boucles
-// $html = $tags[0];
-// $html->getName();
-// $tags[0]->getName();
-
-
-
 class TestFixtures extends Fixture implements FixtureGroupInterface
 {
     private $faker;
@@ -54,56 +39,62 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
         $this->loadGenres();
         $this->loadAuteurs();
         $this->loadLivres();
-        // $this->loadEmrprunts();
-        // $this->loadEmprunteurs();
+        $this->loadEmprunteurs();
+        $this->loadEmprunts();
     }
 
     public function loadLivres()
     {
-
-
-        $repoEmprunt = $this->manager->getRepository(Emprunt::class);
-        $emprunts = $repoEmprunt->findAll();
-        $emprunt1 = $repoEmprunt->find(1);
-        $emprunt2 = $repoEmprunt->find(2);
-        $emprunt3 = $repoEmprunt->find(3);
+        $repoAuteur = $this->manager->getRepository(Auteur::class);
+        $auteurs = $repoAuteur->findAll();
+        $auteur1 = $repoAuteur->find(1);
+        $auteur2 = $repoAuteur->find(2);
+        $auteur3 = $repoAuteur->find(3);
+        $auteur4 = $repoAuteur->find(4);
 
         $repoGenres = $this->manager->getRepository(Genre::class);
         $genres = $repoGenres->findAll();
-        // $this->faker->randomElement($tags);
 
-        // on récupère un tag a partir de son id
-        $manga = $repoGenres->find(1);
-        $policier = $repoGenres->find(2);
-        $sf = $repoGenres->find(2);
+        $genre1 = $repoGenres->find(1);
+        $genre2 = $repoGenres->find(2);
+        $genre3 = $repoGenres->find(3);
+        $genre4 = $repoGenres->find(4);
+
+        $repoAuteur = $this->manager->getRepository(Genre::class);
+        $genres = $repoGenres->findAll();
 
         $datas = [
             [
                 'titre' => 'Moi, moche et méchant',
                 'anneeEdition' => 1990,
                 'nombrePage' => 100,
-                'codeIsbn' => null,
-                'genres' => [$manga],
-                // 'emprunt' => [$emprunt1],
-                'auteur' => null,
+                'codeIsbn' => 9785786930024,
+                'genres' => [$genre1],
+                'auteur' => $auteur1,
             ],
             [
                 'titre' => 'Arsène lupin',
                 'anneeEdition' => 2000,
                 'nombrePage' => 150,
-                'codeIsbn' => null,
-                'genres' => [$policier, $sf],
-                // 'emprunt' => [$emprunt2],
-                'auteur' => null,
+                'codeIsbn' => 9783817260935,
+                'genres' => [$genre2, $genre3],
+                'auteur' => $auteur2,
             ],
             [
                 'titre' => 'Starfield',
                 'anneeEdition' => 2020,
-                'nombrePage' => 300,
-                'codeIsbn' => null,
-                'genres' => [$sf],
-                // 'emprunt' => [$emprunt3],
-                'auteur' => null,
+                'nombrePage' => 200,
+                'codeIsbn' => 9782020493727,
+                'genres' => [$genre3],
+                'auteur' => $auteur3,
+            ],
+            [
+                'titre' => 'Quem audis satis belle',
+                'anneeEdition' => 2013,
+                'nombrePage' => 250,
+                'codeIsbn' => 9794059561353,
+                'genres' => [$genre4],
+                'auteur' => $auteur4,
             ],
         ];
 
@@ -116,13 +107,10 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $livre->setNombrePage($data['nombrePage']);
             $livre->setCodeIsbn($data['codeIsbn']);
 
-            // foreach ($data['emprunt'] as $emprunt) {
-            //     $livre->addEmprunt($emprunt);
-            // }
-
             foreach ($data['genres'] as $genre) {
                 $livre->addGenre($genre);
             }
+
 
             $livre->setAuteur($data['auteur']);
 
@@ -139,26 +127,14 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $livre->setTitre($this->faker->sentence($words));
             $livre->setAnneeEdition($this->faker->numberBetween(1970, 2000));
             $livre->setNombrePage($this->faker->numberBetween(50, 400));
-            $livre->setCodeIsbn($this->faker->optional(0.5)->numberBetween(100, 100000));
+            $livre->setCodeIsbn($this->faker->optional(0.5)->numberBetween(1000000000000, 9999999999999));
 
-            // on choisit le nombre de tags au hasard entre 1 et 4
-            $genreCount = random_int(1, 3);
-            // on choisit des tags au hasard depuis la liste complète
-            $genreList = $this->faker->randomElements($genres, $genreCount);
+            $genre = $this->faker->randomElement($genres);
 
-            // on passe revue chaque tag de la short list
-            foreach ($genreList as $genre) {
-                // on associe un tag avec le projet
-                $livre->addGenre($genre);
-            }
+            $livre->addGenre($genre);
 
-            // foreach ($genreList as $emprunt) {
-            //     // on associe un tag avec le projet
-            //     $livre->addEmprunt($emprunt);
-            // }
 
-            $repoAuteur = $this->manager->getRepository(Auteur::class);
-            $auteurs = $repoAuteur->findAll();
+
             $auteur = $this->faker->randomElement($auteurs);
 
             $livre->setAuteur($auteur);
@@ -198,262 +174,233 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
         $this->manager->flush();
 
-            // données dynamique
+        // données dynamique
 
-            for ($i = 0; $i < 500; $i++) {
-                $project = new Auteur();
-                $project->setNom($this->faker->firstName());
-                $project->setPrenom($this->faker->lastName());
-     
-                $this->manager->persist($project);
-            }
+        for ($i = 0; $i < 500; $i++) {
+            $project = new Auteur();
+            $project->setNom($this->faker->firstName());
+            $project->setPrenom($this->faker->lastName());
 
-            $this->manager->flush();
+            $this->manager->persist($project);
+        }
+
+        $this->manager->flush();
     }
 
 
 
-    // public function loadEmrprunts()
-    // {
-    //     $datas = [
-    //         [
-    //             'name' => 'Alan turing',
-    //             'description' => null,
-    //             'startDate' => new DateTime('2022-01-01'),
-    //             'endDate' => new DateTime('2022-12-31'),
-    //         ],
-    //         [
-    //             'name' => 'John Von Neuman',
-    //             'description' => null,
-    //             'startDate' => new DateTime('2022-01-01'),
-    //             'endDate' => new DateTime('2022-12-31'),
-    //         ],
-    //         [
-    //             'name' => 'Brendan Eich',
-    //             'description' => null,
-    //             'startDate' => new DateTime('2022-01-01'),
-    //             'endDate' => new DateTime('2022-12-31'),
-    //         ],
-    //     ];
+    public function loadEmprunts()
+    {
+        $repoLivres = $this->manager->getRepository(Livre::class);
+        $livres = $repoLivres->findAll();
+        $livre1 = $repoLivres->find(1);
+        $livre2 = $repoLivres->find(2);
+        $livre3 = $repoLivres->find(3);
 
-    //     // données statique 
+        $repoEmprunteur = $this->manager->getRepository(Emprunteur::class);
+        $emprunteurs = $repoEmprunteur->findAll();
+        $emprunteur1 = $repoEmprunteur->find(1);
+        $emprunteur2 = $repoEmprunteur->find(2);
+        $emprunteur3 = $repoEmprunteur->find(3);
 
-    //     foreach ($datas as $data) {
-    //         $schoolyear = new Emprunt();
-    //         $schoolyear->setName($data['name']);
-    //         $schoolyear->setDescription($data['description']);
-    //         $schoolyear->setStartDate($data['startDate']);
-    //         $schoolyear->setEndDate($data['endDate']);
 
-    //         $this->manager->persist($schoolyear);
-    //     }
+        $datas = [
+            [
+                'dateEmprunt' => new DateTime('2022-01-01'),
+                'dateRetour' => new DateTime('2022-12-31'),
+                'livre' => $livre1,
+                'emprunteur' => $emprunteur1,
+            ],
+            [
+                'dateEmprunt' => new DateTime('2022-01-01'),
+                'dateRetour' => new DateTime('2022-12-31'),
+                'livre' => $livre2,
+                'emprunteur' => $emprunteur2,
+            ],
+            [
+                'dateEmprunt' => new DateTime('2022-01-01'),
+                'dateRetour' => null,
+                'livre' => $livre3,
+                'emprunteur' => $emprunteur3,
+            ],
+        ];
 
-    //     $this->manager->flush();
+        // données statique 
 
-    //     // données dynamique
+        foreach ($datas as $data) {
+            $emprunt = new Emprunt();
+            $emprunt->setDateEmprunt($data['dateEmprunt']);
+            $emprunt->setDateRetour($data['dateRetour']);
+            $emprunt->setLivre($data['livre']);
+            $emprunt->setEmprunteur($data['emprunteur']);
 
-    //     for ($i = 0; $i < 10; $i++) {
-    //         $schoolyear = new Emprunt();
-    //         $words = random_int(2, 4);
-    //         $schoolyear->setName($this->faker->unique()->sentence($words));
-    //         $words = random_int(2, 10);
-    //         $schoolyear->setDescription($this->faker->optional(0.7)->sentence($words));
+            $this->manager->persist($emprunt);
+        }
 
-    //         $startDate = $this->faker->dateTimeBetween('-1 year', '- 6months');
-    //         $schoolyear->setStartDate($startDate);
+        $this->manager->flush();
 
-    //         $endDate = $this->faker->dateTimeBetween('- 3 months', 'now');
-    //         $schoolyear->setEndDate($endDate);
+        // données dynamique
 
-    //         $this->manager->persist($schoolyear);
-    //     }
-    //     $this->manager->flush();
-    // }
+        for ($i = 0; $i < 200; $i++) {
+
+            $randomLivre = $this->faker->unique()->randomElement($livres);
+            $randomEmprunteur = $this->faker->randomElement($emprunteurs);
+
+            $emprunt = new Emprunt();
+            $emprunt->setDateEmprunt($this->faker->dateTimeBetween('-1 year', '- 1months'));
+            $emprunt->setDateRetour($this->faker->optional(0.8)->dateTimeBetween('-1 year', 'now'));
+            $emprunt->setLivre($randomLivre);
+            $emprunt->setEmprunteur($randomEmprunteur);
+
+            $this->manager->persist($emprunt);
+        }
+
+        $this->manager->flush();
+    }
 
     public function loadGenres()
     {
-        // $repository = $this->manager->getRepository(Livre::class);
-        // $livres = $repository->findAll();
-        // // $this->faker->randomElement($livres);
-
-        // // on récupère un tag a partir de son id
-        // $livre1 = $repository->find(1);
-        // $livre2 = $repository->find(2);
-        // $livre3 = $repository->find(3);
-
-
         // données statique
         $datas = [
             [
-                'nom' => 'Manga',
-                'description' => 'Livre d\'animation',
-                // 'livres' => [$livre1],
+                'nom' => 'Poésie',
+                'description' => null,
+
             ],
             [
-                'nom' => 'Policer',
-                'description' => 'Thriller policier',
-                // 'livres' => [$livre2],
+                'nom' => 'Nouvelle',
+                'description' => null,
             ],
             [
-                'nom' => 'Science fiction',
-                'description' => 'Livre imaginaire',
-                // 'livres' => [$livre3],
+                'nom' => 'Roman historique',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Roman d\amour',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Roman d\'aventure',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Science-fiction',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Fantasy',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Biographie',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Conte',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Témoignage',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Théatre',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Essai',
+                'description' => null,
+            ],
+            [
+                'nom' => 'Journal intime',
+                'description' => null,
             ],
         ];
         foreach ($datas as $data) {
             $genre = new Genre();
             $genre->setNom($data['nom']);
             $genre->setDescription($data['description']);
-
-            // foreach ($data['livres'] as $livre) {
-            //     $genre->addLivre($livre);
-            // }
-
-            $this->manager->persist($genre);
-        }
-        $this->manager->flush();
-
-        //données dynamique
-        for ($i = 0; $i < 10; $i++) {
-            $genre = new Genre();
-            $words = random_int(1, 3);
-            $genre->setNom($this->faker->unique()->sentence($words));
-            $words = random_int(8, 15);
-            $genre->setDescription($this->faker->sentence($words));
-
-
-            $livresCount = random_int(1, 2);
-            // on choisit des tags au hasard depuis la liste complète
-            // $shortList = $this->faker->randomElements($livres, $livresCount);
-
-            // on passe revue chaque tag de la short list
-            // foreach ($shortList as $livre) {
-            //     // on associe un tag avec le projet
-            //     $genre->addLivre($livre);
-            // }
-
             $this->manager->persist($genre);
         }
         $this->manager->flush();
     }
 
-    // public function loadEmprunteurs(): void
-    // {
-    //     $repoSchoolYear = $this->manager->getRepository(SchoolYear::class);
-    //     $schoolYears = $repoSchoolYear->findAll();
-    //     $repoTag = $this->manager->getRepository(Tag::class);
-    //     $tags = $repoTag->findAll();
-    //     $repoProject = $this->manager->getRepository(Project::class);
-    //     $projects = $repoProject->findAll();
+    public function loadEmprunteurs(): void
+    {
+        // Données statiques
+        $datas = [
+            [
+                'email' => 'foo@example.com',
+                'password' => '123',
+                'roles' => ['ROLE_USER'],
+                'nom' => 'Foo',
+                'prenom' => 'Foo',
+                'actif' => true,
+                'tel' => '0123456789',
+            ],
+            [
+                'email' => 'bar@example.com',
+                'password' => '123',
+                'roles' => ['ROLE_USER'],
+                'nom' => 'Baz',
+                'prenom' => 'Baz',
+                'actif' => false,
+                'tel' => '0123456789',
+            ],
+            [
+                'email' => 'baz@example.com',
+                'password' => '123',
+                'roles' => ['ROLE_USER'],
+                'nom' => 'Baz',
+                'prenom' => 'Baz',
+                'actif' => true,
+                'tel' => '0123456789',
+            ],
+        ];
 
-    //     $siteVitrine = $repoProject->find(1);
-    //     $wordPress = $repoProject->find(2);
-    //     $apiRest = $repoProject->find(3);
+        foreach ($datas as $data) {
 
-    //     $htmlTag = $repoTag->find(1);
-    //     $cssTag = $repoTag->find(2);
-    //     $jsTag = $repoTag->find(3);
+            $user = new User();
+            $user->setEmail($data['email']);
+            $password = $this->hasher->hashPassword($user, $data['password']);
+            $user->setPassword($password);
+            $user->setRoles($data['roles']);
+            $user->setActif($data['actif']);
 
-    //     // Données statiques
-    //     $datas = [
-    //         [
-    //             'email' => 'alice@example.com',
-    //             'password' => '123',
-    //             'roles' => ['ROLE_USER'],
-    //             'firstName' => 'Foo',
-    //             'lastName' => 'Example',
-    //             'schoolYear' => $schoolYears[0],
-    //             'projects' => [$siteVitrine],
-    //             'tags' => [$htmlTag],
-    //         ],
-    //         [
-    //             'email' => 'bob@example.com',
-    //             'password' => '123',
-    //             'roles' => ['ROLE_USER'],
-    //             'firstName' => 'Bar',
-    //             'lastName' => 'Example',
-    //             'schoolYear' => $schoolYears[1],
-    //             'projects' => [$wordPress],
-    //             'tags' => [$cssTag, $htmlTag],
-    //         ],
-    //         [
-    //             'email' => 'charlie@example.com',
-    //             'password' => '123',
-    //             'roles' => ['ROLE_USER'],
-    //             'firstName' => 'Baz',
-    //             'lastName' => 'Example',
-    //             'schoolYear' => $schoolYears[2],
-    //             'projects' => [$apiRest],
-    //             'tags' => [$jsTag],
-    //         ],
-    //     ];
+            $this->manager->persist($user);
 
-    //     foreach ($datas as $data) {
+            $emprunteur = new Emprunteur();
+            $emprunteur->setNom($data['nom']);
+            $emprunteur->setPrenom($data['prenom']);
+            $emprunteur->setTel($data['tel']);
+            $emprunteur->setUser($user);
 
-    //         $user = new User();
-    //         $user->setEmail($data['email']);
-    //         $password = $this->hasher->hashPassword($user, $data['password']);
-    //         $user->setPassword($password);
-    //         $user->setRoles($data['roles']);
-    //         // Persist sert a stocker l'user dans la base de donner
-    //         $this->manager->persist($user);
-
-    //         $student = new Emprunteur();
-    //         $student->setFirstName($data['firstName']);
-    //         $student->setLastName($data['lastName']);
-    //         $student->setSchoolYear($data['schoolYear']);
-    //         $student->setUser($user);
-
-    //         // récupération du premier projet de la liste du student
-    //         $project = $data['projects'][0];
-    //         $student->addProject($project);
+            $this->manager->persist($emprunteur);
+        }
 
 
-    //         foreach ($data['tags'] as $tag) {
-    //             $student->addTag($tag);
-    //         }
-    //         // $tag = $data['tags'][0];
-    //         // $student->addTag($tag);
+        $this->manager->flush();
 
+        // données dynamiques
 
-    //         $this->manager->persist($student);
-    //     }
+        for ($i = 0; $i < 100; $i++) {
+            $user = new User();
+            $user->setEmail($this->faker->unique()->safeEmail());
+            $password = $this->hasher->hashPassword($user, $this->faker->password());
+            $user->setPassword($password);
+            $user->setActif($this->faker->boolean(70));
+            $user->setRoles(['ROLE_USER']);
 
-
-    //     $this->manager->flush();
-
-    //     // flush = push du user dans la base de donner
-
-    //     // // données dynamiques
-    //     for ($i = 0; $i < 50; $i++) {
-    //         $user = new User();
-    //         $user->setEmail($this->faker->unique()->safeEmail());
-    //         $password = $this->hasher->hashPassword($user, $data['password']);
-    //         $user->setPassword($password);
-    //         $user->setRoles(['ROLE_USER']);
-
-    //         $student = new Student();
-    //         $student->setFirstname($this->faker->firstName());
-    //         $student->setLastname($this->faker->lastName());
-
-    //         $schoolYear = $this->faker->randomElement($schoolYears);
-    //         $student->setSchoolYear($schoolYear);
-
-    //         $project = $this->faker->randomElement($projects);
-    //         $student->addProject($project);
-
-    //         $tagsCount = random_int(1, 4);
-    //         $shortList = $this->faker->randomElements($tags, $tagsCount);
-    //         foreach ($shortList as $tag) {
-    //             $student->addTag($tag);
-    //         }
-
-    //         $student->setUser($user);
+            $emprunteur = new Emprunteur();
+            $emprunteur->setPrenom($this->faker->firstName());
+            $emprunteur->setNom($this->faker->lastName());
+            $emprunteur->setTel($this->faker->phoneNumber());
+            $emprunteur->setUser($user);
 
 
 
-    //         $this->manager->persist($user);
-    //     }
-    //     $this->manager->flush();
-    // }
+            $this->manager->persist($user);
+        }
+        $this->manager->flush();
+    }
 }
