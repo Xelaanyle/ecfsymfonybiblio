@@ -50,15 +50,18 @@ class TestController extends AbstractController
     public function livre(ManagerRegistry $doctrine): Response
     {
         $title = 'Test sur les Livres';
-
+        
         $em = $doctrine->getManager();
+
+        $genreRepository = $em->getRepository(Genre::class);
+        $genre6 = $genreRepository->find(6);
+        
         $repository = $em->getRepository(Livre::class);
+        
 
-        // $auteurRepository = $em->getRepository(Auteur::class);
-        // $auteur2 = $auteurRepository->find(2);
+        $auteurRepository = $em->getRepository(Auteur::class);
+        $auteur2 = $auteurRepository->find(2);
 
-        // $genreRepository = $em->getRepository(Genre::class);
-        // $genre6 = $genreRepository->find(6);
 
         // $nLivre = new Livre;
         // $nLivre->setTitre('Totum autem id externum');
@@ -72,8 +75,12 @@ class TestController extends AbstractController
         // $livre2 = $repository->find(2);
         // $genre5 = $genreRepository->find(5);
 
-        // $livre2->setTitre('Aperiendum est igitur');
-        // // $livre2->addGenre($genre5);
+        // $livre2->setTitre('Aperiendum est agitur');
+        // $genres = $livre2->getGenres();
+        // $genreSupprimer = $genres[0];
+        // $livre2->removeGenre($genreSupprimer);
+        // $livre2->addGenre($genre5);
+        // $em->flush();
 
         // $livre123 = $repository->find(123);
 
@@ -83,12 +90,18 @@ class TestController extends AbstractController
         //     $em->flush();
         // }
 
-        // $livreOrders = $repository->findByAlphabetiqueOrder();
+        $livreOrders = $repository->findByAlphabetiqueOrder();
+        $livre1 = $repository->find(1);
 
-        return $this->render('test/school-year.html.twig', [
+        $livreKeywords = $repository->findByKeywordLorem('lorem');
+        $genreKeywords = $repository->findByGenreKeyword();
+
+        return $this->render('test/livre.html.twig', [
             'title' => $title,
-            // 'livreOrder' => $livreOrders,
-            
+            'livre1' => $livre1,
+            'livreOrders' => $livreOrders,
+            'livreKeywords' => $livreKeywords,
+            'genreKeywords' => $genreKeywords
         ]);
     }
 

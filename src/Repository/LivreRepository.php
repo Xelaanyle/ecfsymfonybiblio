@@ -27,8 +27,31 @@ class LivreRepository extends ServiceEntityRepository
     public function findByAlphabetiqueOrder(): array
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.titre = :titre')
-            ->orderBy('titre', 'ASC')
+            ->orderBy('l.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Livre[] Returns an array of Livre objects
+     */
+    public function findByKeywordLorem(string $keyword): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.titre LIKE :keyword')
+            ->setParameter('keyword', "%$keyword%")
+            ->orderBy('l.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByGenreKeyword()
+    {
+        return $this->createQueryBuilder('l')
+            ->innerJoin('l.genres', 'g')
+            ->andWhere('g.nom LIKE :nom')
+            ->setParameter('nom', '%roman%')
+            ->orderBy('l.titre', 'ASC')
             ->getQuery()
             ->getResult();
     }

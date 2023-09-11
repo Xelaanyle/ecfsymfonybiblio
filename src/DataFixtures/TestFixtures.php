@@ -276,7 +276,7 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
                 'description' => null,
             ],
             [
-                'nom' => 'Roman d\amour',
+                'nom' => 'Roman d\'amour',
                 'description' => null,
             ],
             [
