@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block body %}
+
+<style> h2,h1 {color: red} </style>
+
+<h2>Liste des users</h2>
+{% for user in users %}
+<h3> {{ user.id }} </h3>
+<p> {{ user.email }} </p>
+{% endfor %}
+
+<h2> User avec l'id 1 </h2>
+<h3>{{ user1.id }} {{ user1.email }} </h3>
+
+<h2> User avec l'email foo@example.com </h2>
+<h3> {{ foo. id}} </h3>
+<p> {{ foo.email }} </p>
+
+<h2> User avec le role USER_ROLE </h2>
+{% for roleUser in roleList %}
+<h3> {{ roleUser.id }} {{ roleUser.email }}</h3>
+{% endfor %} #}
+
+<h2>Liste des Users inactif</h2>
+{% for userInactif in userInactifs %}
+	<h3> {{ userInactif.id }} {{ userInactif.email }} </h3>
+{% endfor %}
+
+
+
+{% endblock %}
