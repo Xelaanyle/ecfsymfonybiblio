@@ -32,7 +32,7 @@ Créer un fichier `.env.local` à la racine du projet :
 APP_ENV=dev
 APP_DEBUG=true
 APP_SECRET=961e8f78f21f2fec123456ea2a6f2a3f
-DATABASE_URL="mysql://*DataBase*:*password*@127.0.0.1:3306/symfony?serverVersion=mariadb-10.6.12&charset=utf8mb4"
+DATABASE_URL="*DataBase*://*UserDB*:*password*@127.0.0.1:3306/*DataBase*?serverVersion=mariadb-10.6.12&charset=utf8mb4"
 ```
 
 Pensez à changer la variable `APP_SECRET` et les codes d'accès dans la variable `DATABASE_URL`.
