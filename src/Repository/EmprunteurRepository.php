@@ -75,7 +75,7 @@ class EmprunteurRepository extends ServiceEntityRepository
      
          return $this->createQueryBuilder('e')
              ->where('e.createdAt < :dateLimite')
-             ->setParameter('dateLimite', $dateLimite)
+             ->setParameter('dateLimite', '2021-03-01')
              ->orderBy('e.nom', 'ASC')
              ->addOrderBy('e.prenom', 'ASC')
              ->getQuery()

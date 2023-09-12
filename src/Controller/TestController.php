@@ -116,7 +116,7 @@ class TestController extends AbstractController
         $emprunteurFoos = $repository->findByEmprunteurFoo();
         $emprunteurTels = $repository->findByEmprunteurTel();
 
-        // $orderDateCreate = $repository->findByDate();
+        $orderDateCreate = $repository->findByDate();
 
         $repoUser = $em->getRepository(User::class);
         $user3 = $repoUser->find(3);
@@ -129,7 +129,7 @@ class TestController extends AbstractController
             'user3' => $user3,
             'emprunteurFoos' => $emprunteurFoos,
             'emprunteurTels' => $emprunteurTels,
-            // 'orderDates' => $orderDateCreate,
+            'orderDates' => $orderDateCreate,
         ]);
     }
 

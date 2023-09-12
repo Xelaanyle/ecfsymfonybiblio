@@ -35,8 +35,8 @@
     <h3> {{ emprunteurTel.id }} {{ emprunteurTel.nom }} {{ emprunteurTel.prenom }} {{ emprunteurTel.tel }} </h3>
 {% endfor %}
 
-{# <h2> Liste des emprunteurs ayant crée leur compte avant le 01/03/2021</h2>
+<h2> Liste des emprunteurs ayant crée leur compte avant le 01/03/2021</h2>
 {% for orderDate in orderDates %}
-<h3> {{ orderDate.nom }} </h3>
-{% endfor %} #}
+<h3> {{ orderDate.id }} {{ orderDate.nom }} {{ orderDate.prenom }} </h3>
+{% endfor %}
 {% endblock %}

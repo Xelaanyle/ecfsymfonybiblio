@@ -393,10 +393,15 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $user->setActif($this->faker->boolean(70));
             $user->setRoles(['ROLE_USER']);
 
+            $dateCreation = $this->faker->dateTimeBetween('2020-01-01', '2023-12-31');
+            $dateMiseAJour = $this->faker->dateTimeBetween($dateCreation, '2023-12-31');
+
             $emprunteur = new Emprunteur();
             $emprunteur->setPrenom($this->faker->firstName());
             $emprunteur->setNom($this->faker->lastName());
             $emprunteur->setTel($this->faker->phoneNumber());
+            $emprunteur->setCreatedAt($dateCreation);
+            $emprunteur->setUpdatedAt($dateMiseAJour);
             $emprunteur->setUser($user);
 
 
