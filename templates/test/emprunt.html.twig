@@ -8,9 +8,29 @@
 
 <style> h2,h1 {color: red} </style>
 
-<h2> Liste de tous les emprunts par ordre alphabétique</h2>
-
+<h2> Liste des 10 dernier emprunt par ordre DESC</h2>
+{% for lastEmprunt in lastEmprunts %}
+    <h3> {{ lastEmprunt.id }} {{ lastEmprunt.livre.titre }} {{ lastEmprunt.dateEmprunt|date("d/m/y") }}</h3>
 {% endfor %}
 
+<h2> Liste des emprunt fait par l'emprunteur ID 2 </h2>
+{% for empruntId in empruntId2 %}
+    <h3> {{ empruntId.id }} {{ empruntId.livre.titre }} </h3>
+{% endfor %}
+
+<h2> Liste des emprunts du livre id 3 </h2>
+{% for empruntLivre in empruntLivres %}
+    <h3> {{ empruntLivre.id }} {{ empruntLivre.livre.titre}} {{ empruntLivre.dateEmprunt|date("d/m/y") }} </h3>
+{% endfor %}
+
+<h2> Liste des 10 dernier retour d'emprunt </h2>
+{% for retourEmprunt in retourEmprunts %}
+    <h3> {{ retourEmprunt.id }} {{ retourEmprunt.livre.titre }} {{ retourEmprunt.dateRetour|date("d/m/y") }}</h3>
+{% endfor %}
+
+<h2> Liste des emprunts non rendu </h2>
+{% for empruntNotReturn in empruntNotReturns %}
+    <h3> {{ empruntNotReturn.id }} {{ empruntNotReturn.livre.titre}} {{ empruntNotReturn.dateEmprunt|date("d/m/y") }} </h3>
+{% endfor %}
 
 {% endblock %}

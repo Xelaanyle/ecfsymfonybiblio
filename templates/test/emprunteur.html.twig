@@ -8,20 +8,21 @@
 
 <style> h2,h1 {color: red} </style>
 
-{# <h2> Liste de tous les emprunteurs par ordre alphabétique</h2>
+<h2> Liste de tous les emprunteurs par ordre alphabétique</h2>
 {% for emprunteur in emprunteurs %}
     <h3> {{ emprunteur.id }} {{ emprunteur.nom }} {{ emprunteur.prenom }} </h3>
-{% endfor %} #}
+{% endfor %}
 
 <h2> Donnée complète de l'emprunteur 3</h2>
 <h3> {{ emprunteur3.id }} {{ emprunteur3.nom }} {{ emprunteur3.prenom }} {{ emprunteur3.tel}} </h3>
 <h3> {{ emprunteur3.user.id }} {{ emprunteur3.user.email }} {{ emprunteur3.user.actif ? "Oui" : "Non" }}</h3>
 
-<h2> Donnée complète user 3 </h2>
-<h3> {{ user3.emprunteur.id }} {{ user3.emprunteur.nom }} {{ user3.emprunteur.prenom }}</h3>
-<h3> {{ user3.id }} </h3>
-<p>Email : {{ user3.email }} </p>
-<p>Actif : {{ user3.actif ? "Oui" : "Non" }} </h3>
+<h2> Donnée user 3 </h2>
+<h3> {{ userEmprunteur.nom }} </h3>
+<p> {{ userEmprunteur.prenom }} </p>
+<p> {{ userEmprunteur.tel}} </h3>
+
+
 
 <h2> Liste des emprunteurs dont le nom ou le prénom contient "foo" </h2>
 

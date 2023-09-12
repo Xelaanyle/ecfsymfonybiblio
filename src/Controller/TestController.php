@@ -41,7 +41,7 @@ class TestController extends AbstractController
             'users' => $users,
             'user1' => $user1,
             'foo' => $foo,
-            'roleList' => $roleList, 
+            'roleList' => $roleList,
             'userInactifs' => $userInactifs,
         ]);
     }
@@ -50,18 +50,15 @@ class TestController extends AbstractController
     public function livre(ManagerRegistry $doctrine): Response
     {
         $title = 'Test sur les Livres';
-        
+
         $em = $doctrine->getManager();
+        $repository = $em->getRepository(Livre::class);
 
         $genreRepository = $em->getRepository(Genre::class);
         $genre6 = $genreRepository->find(6);
-        
-        $repository = $em->getRepository(Livre::class);
-        
 
         $auteurRepository = $em->getRepository(Auteur::class);
         $auteur2 = $auteurRepository->find(2);
-
 
         $nLivre = new Livre;
         $nLivre->setTitre('Totum autem id externum');
@@ -75,16 +72,18 @@ class TestController extends AbstractController
         $livre2 = $repository->find(2);
         $genre5 = $genreRepository->find(5);
 
-        $livre2->setTitre('Aperiendum est agitur');
-        $livre2->addGenre($genre5);
-        $em->flush();
+        if($livre2){
+            $livre2->setTitre('Aperiendum est agitur');
+            $livre2->addGenre($genre5);
+            $em->flush();
+        }
 
         $livre123 = $repository->find(123);
 
-        // if ($livre123) {
-        //     $em->remove($livre123);
-        //     $em->flush();
-        // }
+        if ($livre123) {
+            $em->remove($livre123);
+            $em->flush();
+        }
 
         $livreOrders = $repository->findByAlphabetiqueOrder();
         $livre1 = $repository->find(1);
@@ -102,7 +101,7 @@ class TestController extends AbstractController
             'livreAuteurs' => $livreAuteurs,
         ]);
     }
-    
+
     #[Route('/emprunteur', name: 'app_test_emprunteur')]
     public function emprunteur(ManagerRegistry $doctrine): Response
     {
@@ -113,22 +112,20 @@ class TestController extends AbstractController
 
         $emprunteurs = $repository->findByEmprunteur();
         $emprunteur3 = $repository->find(3);
-        $emprunteurFoos = $repository->findByEmprunteurFoo();
-        $emprunteurTels = $repository->findByEmprunteurTel();
-
+        $emprunteurFoo = $repository->findByEmprunteurFoo();
+        $emprunteurTel = $repository->findByEmprunteurTel();
+        $userEmprunteur = $repository->findEmprunteurByUserId(3);
         $orderDateCreate = $repository->findByDate();
 
-        $repoUser = $em->getRepository(User::class);
-        $user3 = $repoUser->find(3);
 
 
         return $this->render('test/emprunteur.html.twig', [
             'title' => $title,
             'emprunteurs' => $emprunteurs,
             'emprunteur3' => $emprunteur3,
-            'user3' => $user3,
-            'emprunteurFoos' => $emprunteurFoos,
-            'emprunteurTels' => $emprunteurTels,
+            'userEmprunteur' => $userEmprunteur,
+            'emprunteurFoos' => $emprunteurFoo,
+            'emprunteurTels' => $emprunteurTel,
             'orderDates' => $orderDateCreate,
         ]);
     }
@@ -141,11 +138,46 @@ class TestController extends AbstractController
         $em = $doctrine->getManager();
         $repository = $em->getRepository(Emprunt::class);
 
+        $lastEmprunt = $repository->findLast10Emprunts();
+        $empruntId2 = $repository->findEmpruntsByEmprunteurId();
+        $empruntLivre = $repository->findEmpruntsByLivreId();
+        $retourEmprunt = $repository->findLast10EmpruntsReturn();
+        $empruntNotReturn = $repository->findEmpruntsNotReturn();
 
+        $emprunteur = $em->getRepository(Emprunteur::class)->find(1);
+        $livre = $em->getRepository(Livre::class)->find(1);
+
+        $emprunt = new Emprunt();
+        $dateEmprunt = new DateTime('2020-12-01 16:00:00');
+        $emprunt->setDateEmprunt($dateEmprunt);
+        $emprunt->setDateRetour(null);
+        $emprunt->setLivre($livre);
+        $emprunt->setEmprunteur($emprunteur);
+        $em->persist($emprunt);
+        $em->flush();
+
+        $empruntId3 = $repository->find(3);
+
+        if ($empruntId3) {
+            $dateRetour = new DateTime('2020-05-01 10:00:00');
+            $empruntId3->setDateRetour($dateRetour);
+            $em->flush();
+        }
+
+        $empruntId42 = $repository->find(42);
+
+        if ($empruntId42) {
+            $em->remove($empruntId42);
+            $em->flush();
+        }
 
         return $this->render('test/emprunt.html.twig', [
             'title' => $title,
-
+            'lastEmprunts' => $lastEmprunt,
+            'empruntId2' => $empruntId2,
+            'empruntLivres' => $empruntLivre,
+            'retourEmprunts' => $retourEmprunt,
+            'empruntNotReturns' => $empruntNotReturn,
         ]);
     }
 }

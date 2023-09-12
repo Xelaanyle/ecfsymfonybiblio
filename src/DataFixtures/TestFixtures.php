@@ -362,22 +362,22 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
         foreach ($datas as $data) {
 
+            $emprunteur = new Emprunteur();
+            $emprunteur->setNom($data['nom']);
+            $emprunteur->setPrenom($data['prenom']);
+            $emprunteur->setTel($data['tel']);
+
+            $this->manager->persist($emprunteur);
+
             $user = new User();
             $user->setEmail($data['email']);
             $password = $this->hasher->hashPassword($user, $data['password']);
             $user->setPassword($password);
             $user->setRoles($data['roles']);
             $user->setActif($data['actif']);
+            $user->setEmprunteur($emprunteur);
 
             $this->manager->persist($user);
-
-            $emprunteur = new Emprunteur();
-            $emprunteur->setNom($data['nom']);
-            $emprunteur->setPrenom($data['prenom']);
-            $emprunteur->setTel($data['tel']);
-            $emprunteur->setUser($user);
-
-            $this->manager->persist($emprunteur);
         }
 
 
@@ -386,13 +386,7 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
         // données dynamiques
 
         for ($i = 0; $i < 100; $i++) {
-            $user = new User();
-            $user->setEmail($this->faker->unique()->safeEmail());
-            $password = $this->hasher->hashPassword($user, $this->faker->password());
-            $user->setPassword($password);
-            $user->setActif($this->faker->boolean(70));
-            $user->setRoles(['ROLE_USER']);
-
+            
             $dateCreation = $this->faker->dateTimeBetween('2020-01-01', '2023-12-31');
             $dateMiseAJour = $this->faker->dateTimeBetween($dateCreation, '2023-12-31');
 
@@ -402,11 +396,17 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $emprunteur->setTel($this->faker->phoneNumber());
             $emprunteur->setCreatedAt($dateCreation);
             $emprunteur->setUpdatedAt($dateMiseAJour);
-            $emprunteur->setUser($user);
 
+            $user = new User();
+            $user->setEmail($this->faker->unique()->safeEmail());
+            $password = $this->hasher->hashPassword($user, $this->faker->password());
+            $user->setPassword($password);
+            $user->setActif($this->faker->boolean(70));
+            $user->setRoles(['ROLE_USER']);
+            $user->setEmprunteur($emprunteur);
 
-
-            $this->manager->persist($user);
+            
+            $this->manager->persist($emprunteur);
         }
         $this->manager->flush();
     }

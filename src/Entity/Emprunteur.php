@@ -30,8 +30,9 @@ class Emprunteur
     #[ORM\OneToMany(mappedBy: 'emprunteur', targetEntity: Emprunt::class)]
     private Collection $emprunts;
 
-    #[ORM\OneToOne(mappedBy: 'emprunteur', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'emprunteur', cascade: ['persist', 'remove'])]
     private ?User $user = null;
+
 
     public function __construct()
     {
@@ -116,18 +117,10 @@ class Emprunteur
 
     public function setUser(?User $user): static
     {
-        // unset the owning side of the relation if necessary
-        if ($user === null && $this->user !== null) {
-            $this->user->setEmprunteur(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($user !== null && $user->getEmprunteur() !== $this) {
-            $user->setEmprunteur($this);
-        }
-
         $this->user = $user;
 
         return $this;
     }
+
+
 }
