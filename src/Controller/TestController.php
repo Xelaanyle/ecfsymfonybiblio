@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use DateTime;
-use Exception;
 use App\Entity\Auteur;
 use App\Entity\Emprunt;
 use App\Entity\Emprunteur;
