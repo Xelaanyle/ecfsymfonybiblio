@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block body %}
+
+<style> h2,h1 {color: red} </style>
+
+{# <h2> Liste de tous les emprunteurs par ordre alphabétique</h2>
+{% for emprunteur in emprunteurs %}
+    <h3> {{ emprunteur.id }} {{ emprunteur.nom }} {{ emprunteur.prenom }} </h3>
+{% endfor %} #}
+
+<h2> Donnée complète de l'emprunteur 3</h2>
+<h3> {{ emprunteur3.id }} {{ emprunteur3.nom }} {{ emprunteur3.prenom }} {{ emprunteur3.tel}} </h3>
+<h3> {{ emprunteur3.user.id }} {{ emprunteur3.user.email }} {{ emprunteur3.user.actif ? "Oui" : "Non" }}</h3>
+
+<h2> Donnée complète user 3 </h2>
+<h3> {{ user3.emprunteur.id }} {{ user3.emprunteur.nom }} {{ user3.emprunteur.prenom }}</h3>
+<h3> {{ user3.id }} </h3>
+<p>Email : {{ user3.email }} </p>
+<p>Actif : {{ user3.actif ? "Oui" : "Non" }} </h3>
+
+<h2> Liste des emprunteurs dont le nom ou le prénom contient "foo" </h2>
+
+{% for emprunteurFoo in emprunteurFoos %}
+    <h3> {{ emprunteurFoo.id }} {{ emprunteurFoo.nom }} {{ emprunteurFoo.prenom }}  </h3>
+{% endfor %}
+
+<h2> Liste des emprunteurs dont le numéro contient "1234" </h2>
+
+{% for emprunteurTel in emprunteurTels %}
+    <h3> {{ emprunteurTel.id }} {{ emprunteurTel.nom }} {{ emprunteurTel.prenom }} {{ emprunteurTel.tel }} </h3>
+{% endfor %}
+
+{# <h2> Liste des emprunteurs ayant crée leur compte avant le 01/03/2021</h2>
+{% for orderDate in orderDates %}
+<h3> {{ orderDate.nom }} </h3>
+{% endfor %} #}
+{% endblock %}

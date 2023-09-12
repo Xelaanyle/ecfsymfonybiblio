@@ -19,6 +19,11 @@
     {% endfor %}
 </ul>
 
+<h2> Liste des livre fait par l'auteur 2 </h2>
+{% for livreAuteur in livreAuteurs %}
+<h3> {{ livreAuteur.titre }} </h3>    
+{% endfor %}
+
 <h2>Liste des livres dont le titre contient le mot lorem</h2>
 {% for livreKeyword in livreKeywords %}
 <h3> {{livreKeyword.id}} {{livreKeyword.titre}}</h3>
@@ -39,11 +44,11 @@
 {% endfor %}
 
 
-{# <h2>Liste des Livres par ordre alphabétique</h2>
+<h2>Liste des Livres par ordre alphabétique</h2>
 {% for livreOrder in livreOrders %}
 	<h3> {{ livreOrder.id }} {{ livreOrder.titre }} </h3>
 	<p> {{ livreOrder.auteur.nom }} {{ livreOrder.auteur.prenom }}</p>
-{% endfor %} #}
+{% endfor %}
 
 
 

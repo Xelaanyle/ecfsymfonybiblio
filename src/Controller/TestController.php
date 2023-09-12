@@ -63,29 +63,25 @@ class TestController extends AbstractController
         $auteur2 = $auteurRepository->find(2);
 
 
-        // $nLivre = new Livre;
-        // $nLivre->setTitre('Totum autem id externum');
-        // $nLivre->setAnneeEdition(2020);
-        // $nLivre->setNombrePage(300);
-        // $nLivre->setCodeIsbn(9790412882714);
-        // $nLivre->setAuteur($auteur2);
-        // $nLivre->addGenre($genre6);
-        // $em->persist($nLivre);
+        $nLivre = new Livre;
+        $nLivre->setTitre('Totum autem id externum');
+        $nLivre->setAnneeEdition(2020);
+        $nLivre->setNombrePage(300);
+        $nLivre->setCodeIsbn(9790412882714);
+        $nLivre->setAuteur($auteur2);
+        $nLivre->addGenre($genre6);
+        $em->persist($nLivre);
 
-        // $livre2 = $repository->find(2);
-        // $genre5 = $genreRepository->find(5);
+        $livre2 = $repository->find(2);
+        $genre5 = $genreRepository->find(5);
 
-        // $livre2->setTitre('Aperiendum est agitur');
-        // $genres = $livre2->getGenres();
-        // $genreSupprimer = $genres[0];
-        // $livre2->removeGenre($genreSupprimer);
-        // $livre2->addGenre($genre5);
-        // $em->flush();
+        $livre2->setTitre('Aperiendum est agitur');
+        $livre2->addGenre($genre5);
+        $em->flush();
 
-        // $livre123 = $repository->find(123);
+        $livre123 = $repository->find(123);
 
         // if ($livre123) {
-        //     // supression de l'objet
         //     $em->remove($livre123);
         //     $em->flush();
         // }
@@ -95,54 +91,61 @@ class TestController extends AbstractController
 
         $livreKeywords = $repository->findByKeywordLorem('lorem');
         $genreKeywords = $repository->findByGenreKeyword();
+        $livreAuteurs = $repository->findByAuteurId();
 
         return $this->render('test/livre.html.twig', [
             'title' => $title,
             'livre1' => $livre1,
             'livreOrders' => $livreOrders,
             'livreKeywords' => $livreKeywords,
-            'genreKeywords' => $genreKeywords
+            'genreKeywords' => $genreKeywords,
+            'livreAuteurs' => $livreAuteurs,
+        ]);
+    }
+    
+    #[Route('/emprunteur', name: 'app_test_emprunteur')]
+    public function emprunteur(ManagerRegistry $doctrine): Response
+    {
+        $title = 'Test sur les Emprunteurs';
+
+        $em = $doctrine->getManager();
+        $repository = $em->getRepository(Emprunteur::class);
+
+        $emprunteurs = $repository->findByEmprunteur();
+        $emprunteur3 = $repository->find(3);
+        $emprunteurFoos = $repository->findByEmprunteurFoo();
+        $emprunteurTels = $repository->findByEmprunteurTel();
+
+        // $orderDateCreate = $repository->findByDate();
+
+        $repoUser = $em->getRepository(User::class);
+        $user3 = $repoUser->find(3);
+
+
+        return $this->render('test/emprunteur.html.twig', [
+            'title' => $title,
+            'emprunteurs' => $emprunteurs,
+            'emprunteur3' => $emprunteur3,
+            'user3' => $user3,
+            'emprunteurFoos' => $emprunteurFoos,
+            'emprunteurTels' => $emprunteurTels,
+            // 'orderDates' => $orderDateCreate,
         ]);
     }
 
-    // #[Route('/project', name: 'app_test_project')]
-    // public function schoolYear(ManagerRegistry $doctrine): Response
-    // {
-    //     $em = $doctrine->getManager();
-    //     $repository = $em->getRepository(Project::class);
+    #[Route('/emprunt', name: 'app_test_emprunt')]
+    public function emprunt(ManagerRegistry $doctrine): Response
+    {
+        $title = 'Test sur les Emprunts';
 
-    //     $project = new Project;
-    //     $project->setName('Promo 11');
-    //     $project->setDescription('Formation de la promo 11');
-    //     $project->setClientName('Alexandre');
-    //     $project->setStartDate(new DateTime('2023-01-01'));
-    //     $project->setCheckPointDate(new DateTime('2023-06-01'));
-    //     $project->setDeliveryDate(new DateTime('2023-07-01'));
-    //     $em->persist($project);
+        $em = $doctrine->getManager();
+        $repository = $em->getRepository(Emprunt::class);
 
-    //     try {
-    //         $em->flush();
-    //     } catch (Exception $e) {
-    //         // géréer le message d'erreur
-    //         dump($e->getMessage('Erreur'));
-    //     };
 
-    //     $projects = $repository->findAll();
-    //     $project = $repository->find(1);
-    //     $project14 = $repository->find(14);
 
-    //     if ($project14) {
-    //         // supression de l'objet
-    //         $em->remove($project14);
-    //         $em->flush();
-    //     }
+        return $this->render('test/emprunt.html.twig', [
+            'title' => $title,
 
-    //     $title = 'Test des school years';
-
-    //     return $this->render('test/project.html.twig', [
-    //         'title' => $title,
-    //         'project' => $project,
-    //         'projects' => $projects,
-    //     ]);
-    // }
+        ]);
+    }
 }

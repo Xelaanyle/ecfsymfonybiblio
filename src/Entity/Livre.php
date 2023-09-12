@@ -27,7 +27,7 @@ class Livre
     #[ORM\Column(length: 190, nullable: true)]
     private ?string $codeIsbn = null;
 
-    #[ORM\ManyToMany(targetEntity: genre::class, inversedBy: 'livres')]
+    #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'livres')]
     private Collection $genres;
 
     #[ORM\OneToMany(mappedBy: 'livre', targetEntity: Emprunt::class)]

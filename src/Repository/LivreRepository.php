@@ -45,7 +45,11 @@ class LivreRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByGenreKeyword()
+     /**
+     * @return Livre[] Returns an array of Livre objects
+     */
+
+    public function findByGenreKeyword(): array
     {
         return $this->createQueryBuilder('l')
             ->innerJoin('l.genres', 'g')
@@ -54,6 +58,21 @@ class LivreRepository extends ServiceEntityRepository
             ->orderBy('l.titre', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+     /**
+     * @return Livre[] Returns an array of Livre objects
+     */
+
+    public function findByAuteurId(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.auteur = :auteur')
+            ->setParameter('auteur', '2')
+            ->orderBy('l.titre', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     //    /**

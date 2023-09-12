@@ -21,28 +21,76 @@ class EmprunteurRepository extends ServiceEntityRepository
         parent::__construct($registry, Emprunteur::class);
     }
 
-//    /**
-//     * @return Emprunteur[] Returns an array of Emprunteur objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Emprunteur
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @return Emprunteur[] Returns an array of Emprunteur objects
+     */
+    public function findByEmprunteur(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.nom', 'ASC')
+            ->addOrderBy('e.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Emprunteur[] Returns an array of Emprunteur objects
+     */
+
+    public function findByEmprunteurFoo(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->Where('e.nom LIKE :search')
+            ->andWhere('e.prenom LIKE :search')
+            ->setParameter('search', '%foo%')
+            ->orderBy('e.nom', 'ASC')
+            ->addOrderBy('e.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Emprunteur[] Returns an array of Emprunteur objects
+     */
+
+     public function findByEmprunteurTel(): array
+     {
+         return $this->createQueryBuilder('e')
+             ->Where('e.tel LIKE :tel')
+             ->setParameter('tel', '%1234%')
+             ->orderBy('e.nom', 'ASC')
+             ->addOrderBy('e.prenom', 'ASC')
+             ->getQuery()
+             ->getResult();
+     }
+
+     /**
+     * @return Emprunteur[] Returns an array of Emprunteur objects
+     */
+
+     public function findByDate(): array
+     {
+         $dateLimite = new \DateTime('2021-03-01');
+     
+         return $this->createQueryBuilder('e')
+             ->where('e.createdAt < :dateLimite')
+             ->setParameter('dateLimite', $dateLimite)
+             ->orderBy('e.nom', 'ASC')
+             ->addOrderBy('e.prenom', 'ASC')
+             ->getQuery()
+             ->getResult();
+     }
+     
+
+
+    //    public function findOneBySomeField($value): ?Emprunteur
+    //    {
+    //        return $this->createQueryBuilder('e')
+    //            ->andWhere('e.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

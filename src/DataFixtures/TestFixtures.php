@@ -60,9 +60,6 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
         $genre3 = $repoGenres->find(3);
         $genre4 = $repoGenres->find(4);
 
-        $repoAuteur = $this->manager->getRepository(Genre::class);
-        $genres = $repoGenres->findAll();
-
         $datas = [
             [
                 'titre' => 'Moi, moche et méchant',
@@ -127,12 +124,17 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $livre->setTitre($this->faker->sentence($words));
             $livre->setAnneeEdition($this->faker->numberBetween(1970, 2000));
             $livre->setNombrePage($this->faker->numberBetween(50, 400));
-            $livre->setCodeIsbn($this->faker->optional(0.5)->numberBetween(1000000000000, 9999999999999));
+            $livre->setCodeIsbn($this->faker->optional(0.5)->isbn13());
 
-            $genre = $this->faker->randomElement($genres);
+            $countG = random_int(1, 2);
 
-            $livre->addGenre($genre);
+            $listGenre = $this->faker->randomElements($genres, $countG);
+            
 
+            
+            foreach ( $listGenre as $genre ) {
+                $livre->addGenre($genre);
+            }
 
 
             $auteur = $this->faker->randomElement($auteurs);
