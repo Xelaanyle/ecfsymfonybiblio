@@ -57,6 +57,12 @@ symfony serve
 
 Puis ouvrez la page suivante : [https://localhost:8000](https://localhost:8000)
 
+URL pour tester les requêtes de test :
+- [Requête User](https://localhost:8000/user)
+- [Requête Livre](https://localhost:8000/livre)
+- [Requête Emprunteur](https://localhost:8000/emprunteur)
+- [Requête Emprunt](https://localhost:8000/emprunt)
+
 ## Mention légales
 
 Sous projet est sous licence MIT.
