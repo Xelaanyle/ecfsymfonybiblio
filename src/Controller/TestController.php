@@ -116,8 +116,6 @@ class TestController extends AbstractController
         $userEmprunteur = $repository->findEmprunteurByUserId(3);
         $orderDateCreate = $repository->findByDate();
 
-
-
         return $this->render('test/emprunteur.html.twig', [
             'title' => $title,
             'emprunteurs' => $emprunteurs,
