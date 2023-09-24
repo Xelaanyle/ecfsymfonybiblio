@@ -45,7 +45,7 @@ class LivreRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-     /**
+    /**
      * @return Livre[] Returns an array of Livre objects
      */
 
@@ -60,7 +60,7 @@ class LivreRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-     /**
+    /**
      * @return Livre[] Returns an array of Livre objects
      */
 
@@ -71,8 +71,7 @@ class LivreRepository extends ServiceEntityRepository
             ->setParameter('auteur', '2')
             ->orderBy('l.titre', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     //    /**

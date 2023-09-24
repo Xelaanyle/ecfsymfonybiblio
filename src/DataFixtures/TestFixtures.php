@@ -250,7 +250,7 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
             $emprunt = new Emprunt();
             $emprunt->setDateEmprunt($this->faker->dateTimeBetween('-1 year', '- 1months'));
-            $emprunt->setDateRetour($this->faker->optional(0.8)->dateTimeBetween('-1 year', 'now'));
+            $emprunt->setDateRetour($this->faker->dateTimeBetween('-1 months', '+1 months'));
             $emprunt->setLivre($randomLivre);
             $emprunt->setEmprunteur($randomEmprunteur);
 
@@ -387,8 +387,8 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
         for ($i = 0; $i < 100; $i++) {
             
-            $dateCreation = $this->faker->dateTimeBetween('2020-01-01', '2023-12-31');
-            $dateMiseAJour = $this->faker->dateTimeBetween($dateCreation, '2023-12-31');
+            $dateCreation = $this->faker->dateTimeBetween('2020-01-01', '2022-12-31');
+            $dateMiseAJour = $this->faker->dateTimeBetween($dateCreation, '2022-12-31');
 
             $emprunteur = new Emprunteur();
             $emprunteur->setPrenom($this->faker->firstName());

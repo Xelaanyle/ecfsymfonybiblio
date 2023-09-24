@@ -3,18 +3,18 @@
 namespace App\Form;
 
 use App\Entity\Emprunteur;
+use App\Form\EmprunteurType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EmprunteurType extends AbstractType
+class EmprunteurProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
-            ->add('prenom')
-            ->add('tel')
+            ->add('email')
+            ->add('emprunteur', EmprunteurType::class)
         ;
     }
 

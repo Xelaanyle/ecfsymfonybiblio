@@ -35,6 +35,7 @@ class Livre
 
     #[ORM\ManyToOne(inversedBy: 'livres')]
     private ?Auteur $auteur = null;
+    
 
     public function __construct()
     {

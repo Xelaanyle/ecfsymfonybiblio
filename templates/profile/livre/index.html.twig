@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livre index
+{% endblock %}
+
+{% block body %}
+	<h1>Liste des Livres</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Titre</th>
+				<th>AnneeEdition</th>
+				<th>NombrePage</th>
+				<th>CodeIsbn</th>
+				<th>Auteur</th>
+				<th>Genre</th>
+				<th>Disponibilité</th>
+				<th>Date retour</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for livre in livres %}
+				<tr>
+					<td>{{ livre.id }}</td>
+					<td>{{ livre.titre }}</td>
+					<td>{{ livre.anneeEdition }}</td>
+					<td>{{ livre.nombrePage }}</td>
+					<td>{{ livre.codeIsbn }}</td>
+					<td>
+						{{ livre.auteur.prenom }}
+						{{ livre.auteur.nom }}
+					</td>
+					<td>
+						{% for genre in livre.genres %}
+							{{ genre.nom }}
+						{% endfor %}
+					</td>
+					<td>
+						{% set today = "now"|date("Y-m-d") %}
+						{% set disponible = true %}
+
+						{% for emprunt in livre.emprunts %}
+							{% if emprunt.dateRetour is not null and emprunt.dateRetour|date("Y-m-d") >= today %}
+								{% set disponible = false %}
+							{% endif %}
+						{% endfor %}
+						{% if disponible %}
+							Disponible
+						{% else %}
+							Indisponible
+						{% endif %}
+					</td>
+					<td>
+						{% for emprunt in livre.emprunts %}
+							{{ emprunt.dateRetour|date("d-m-Y") }}</td>
+					{% endfor %}
+					<td>
+						<a href="{{ path('app_profile_livre_show', {'id': livre.id}) }}">Voir</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
