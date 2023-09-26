@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Livre;
 use App\Entity\Genre;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,7 +15,10 @@ class GenreType extends AbstractType
         $builder
             ->add('nom')
             ->add('description')
-            ->add('livres')
+            ->add('livres' , EntityType::class, [
+                'class' => Livre::class,
+                'choice_label' => 'titre',
+            ])
         ;
     }
 

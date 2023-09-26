@@ -11,33 +11,23 @@
 			<tr>
 				<th>Id</th>
 				<th>Titre</th>
+				<th>Auteur</th>
 				<th>AnneeEdition</th>
 				<th>NombrePage</th>
-				<th>CodeIsbn</th>
-				<th>Auteur</th>
-				<th>Genre</th>
 				<th>Disponibilité</th>
-				<th>Date retour</th>
-				<th>actions</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for livre in livres %}
 				<tr>
 					<td>{{ livre.id }}</td>
-					<td>{{ livre.titre }}</td>
-					<td>{{ livre.anneeEdition }}</td>
-					<td>{{ livre.nombrePage }}</td>
-					<td>{{ livre.codeIsbn }}</td>
+					<td><a href="{{ path('app_home_show', {'id': livre.id}) }}"> {{ livre.titre }} </a> </td>
 					<td>
 						{{ livre.auteur.prenom }}
 						{{ livre.auteur.nom }}
 					</td>
-					<td>
-						{% for genre in livre.genres %}
-							{{ genre.nom }}
-						{% endfor %}
-					</td>
+					<td>{{ livre.anneeEdition }}</td>
+					<td>{{ livre.nombrePage }}</td>
 					<td>
 						{% set today = "now"|date("Y-m-d") %}
 						{% set disponible = true %}
@@ -53,17 +43,9 @@
 							Indisponible
 						{% endif %}
 					</td>
-					<td>
-						{% for emprunt in livre.emprunts %}
-							{{ emprunt.dateRetour|date("d-m-Y") }}</td>
-					{% endfor %}
-					<td>
-						<a href="{{ path('app_profile_livre_show', {'id': livre.id}) }}">Voir</a>
-					</td>
-				</tr>
 			{% else %}
 				<tr>
-					<td colspan="6">no records found</td>
+					<td colspan="6">Aucune donnée</td>
 				</tr>
 			{% endfor %}
 		</tbody>

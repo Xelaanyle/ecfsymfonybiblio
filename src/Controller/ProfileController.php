@@ -3,44 +3,46 @@
 namespace App\Controller;
 
 use App\Entity\Livre;
-use DateTime;
+use App\Entity\User;
+use App\Entity\Emprunt;
+use App\Entity\Emprunteur;
 use App\Repository\EmpruntRepository;
 use App\Repository\LivreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/profile')]
 class ProfileController extends AbstractController
 {
-
-    
-    #[Route('/livre', name: 'app_profile_livre_index', methods: ['GET'])]
-    public function indexLivre(LivreRepository $livreRepository ): Response
-    {
-
-        $livres = $livreRepository->findAll();
-
-        
-        return $this->render('profile/livre/index.html.twig', [
-            'livres' => $livres,
-        ]);
-    }
-    
-    
-    #[Route('/livre/{id}', name: 'app_profile_livre_show', methods: ['GET'])]
-    public function showLivre(Livre $livre): Response
-    {
-        return $this->render('profile/livre/show.html.twig', [
-            'livre' => $livre,
-        ]);
-    }
-
-    #[Route('/emprunt', name: 'app_profile_emprunt_index', methods: ['GET'])]
+    #[Route('/emprunt', name: 'app_profile_index', methods: ['GET'])]
     public function indexEmprunt(EmpruntRepository $empruntRepository): Response
     {
-        return $this->render('profile/emprunt/index.html.twig', [
-            'emprunts' => $empruntRepository->findAll(),
+        $user = $this->getUser();
+        $emprunteurId = $user->getEmprunteur()->getId();
+
+        $emprunts = $empruntRepository->findBy(['emprunteur' => $emprunteurId]);
+
+        return $this->render('profile/index.html.twig', [
+            'emprunts' => $emprunts,
         ]);
+    }
+
+    #[Route('/emprunt/{id}', name: 'app_profile_show', methods: ['GET'])]
+    public function show(Emprunt $emprunt): Response
+    {
+        return $this->render('profile/show.html.twig', [
+            'emprunt' => $emprunt,
+        ]);
+    }
+
+    private function filterSessionUser(User $user)
+    {
+        $sessionUser = $this->getUser();
+
+        if ($sessionUser != $user) {
+            throw new AccessDeniedException();
+        }
     }
 }

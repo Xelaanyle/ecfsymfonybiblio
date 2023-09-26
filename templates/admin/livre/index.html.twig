@@ -14,7 +14,7 @@
                 <th>NombrePage</th>
                 <th>CodeIsbn</th>
                 <th>actions</th>
-                <th>Disponible</th>
+                {# <th>Disponible</th> #}
             </tr>
         </thead>
         <tbody>
@@ -25,7 +25,7 @@
                 <td>{{ livre.anneeEdition }}</td>
                 <td>{{ livre.nombrePage }}</td>
                 <td>{{ livre.codeIsbn }}</td>
-                <td>{{ livre.disponible ? 'Oui' : 'Non' }}</td>
+                {# <td>{{ livre.disponible ? 'Oui' : 'Non' }}</td> #}
                 <td>
                     <a href="{{ path('app_admin_livre_show', {'id': livre.id}) }}">show</a>
                     <a href="{{ path('app_admin_livre_edit', {'id': livre.id}) }}">edit</a>

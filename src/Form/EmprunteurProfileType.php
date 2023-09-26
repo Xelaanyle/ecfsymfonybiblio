@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Emprunteur;
+use App\Entity\User;
 use App\Form\EmprunteurType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,14 +14,14 @@ class EmprunteurProfileType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('emprunteur', EmprunteurType::class)
-        ;
+            ->add('emprunteur', EmprunteurType::class);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Emprunteur::class,
+            'data_class' => User::class,
         ]);
     }
 }
