@@ -19,10 +19,20 @@ class ProfileController extends AbstractController
     #[Route('/emprunt', name: 'app_profile_index', methods: ['GET'])]
     public function indexEmprunt(EmpruntRepository $empruntRepository): Response
     {
-        $user = $this->getUser();
-        $emprunteurId = $user->getEmprunteur()->getId();
 
-        $emprunts = $empruntRepository->findBy(['emprunteur' => $emprunteurId]);
+        // Si l'utilisateur est administrateur, il peut voir tous les emprunts
+        if ($this->isGranted('ROLE_ADMIN')) {
+
+            $emprunts = $empruntRepository->findAll();
+
+        } else {
+            
+            /** @var User */
+            $user = $this->getUser();
+            $emprunteurId = $user->getEmprunteur()->getId();
+            $emprunts = $empruntRepository->findBy(['emprunteur' => $emprunteurId]);
+        }
+
 
         return $this->render('profile/index.html.twig', [
             'emprunts' => $emprunts,

@@ -6,10 +6,9 @@
 {% block body %}
 	<h1>Liste des Livres</h1>
 
-	<table class="table">
+	<table>
 		<thead>
 			<tr>
-				<th>Id</th>
 				<th>Titre</th>
 				<th>Auteur</th>
 				<th>AnneeEdition</th>
@@ -20,7 +19,6 @@
 		<tbody>
 			{% for livre in livres %}
 				<tr>
-					<td>{{ livre.id }}</td>
 					<td><a href="{{ path('app_home_show', {'id': livre.id}) }}"> {{ livre.titre }} </a> </td>
 					<td>
 						{{ livre.auteur.prenom }}

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Livre;
 use App\Entity\Auteur;
 use App\Entity\Genre;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,10 +22,16 @@ class LivreType extends AbstractType
             ->add('codeIsbn')
             ->add('genres' , EntityType::class, [
                 'class' => Genre::class,
+                'choice_label' => function(Genre $genre) {
+                    return "{$genre->getNom()}";
+                },
                 'attr' => ['class' => 'form_scrollable-checkboxes'],
-                'choice_label' => 'nom',
                 'multiple' => true,
                 'expanded' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('g')
+                    ->orderby('g.nom', 'ASC');
+                },
             ])
             ->add('auteur' , EntityType::class, [
                 'class' => Auteur::class,

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Emprunt;
 use App\Entity\Livre;
 use App\Entity\Emprunteur;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,17 +16,34 @@ class EmpruntType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('dateEmprunt')
-            ->add('dateRetour')
+            ->add(
+                'dateEmprunt',
+                DateType::class,
+                [
+                    'widget' => 'single_text',
+                ]
+            )
+            ->add(
+                'dateRetour',
+                DateType::class,
+                [
+                    'widget' => 'single_text',
+                ]
+            )
             ->add('livre', EntityType::class, [
                 'class' => Livre::class,
                 'choice_label' => 'titre',
             ])
-            ->add('emprunteur' , EntityType::class, [
-                'class' => Empruteur::class,
-                'choice_label' => 'nom',
-            ])
-        ;
+            ->add(
+                'emprunteur',
+                EntityType::class,
+                [
+                    'class' => Emprunteur::class,
+                    'choice_label' => function (Emprunteur $emprunteur) {
+                        return "{$emprunteur->getNom()} {$emprunteur->getPrenom()}";
+                    },
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

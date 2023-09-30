@@ -7,6 +7,7 @@ use App\Form\EmprunteurType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class EmprunteurProfileType extends AbstractType
 {
@@ -14,6 +15,12 @@ class EmprunteurProfileType extends AbstractType
     {
         $builder
             ->add('email')
+            ->add('actif', ChoiceType::class, [
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false
+                ]
+            ])
             ->add('emprunteur', EmprunteurType::class);
             
     }

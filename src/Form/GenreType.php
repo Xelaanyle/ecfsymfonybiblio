@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Livre;
 use App\Entity\Genre;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,6 +19,11 @@ class GenreType extends AbstractType
             ->add('livres' , EntityType::class, [
                 'class' => Livre::class,
                 'choice_label' => 'titre',
+                'multiple' => true,
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'form_scrollable-checkboxes'
+                ]
             ])
         ;
     }
