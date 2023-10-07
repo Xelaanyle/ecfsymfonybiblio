@@ -56,8 +56,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             // L'utilisateur est un admin
             return new RedirectResponse($this->urlGenerator->generate('app_admin_emprunt_index')); 
         } else {
-            return new RedirectResponse($this->urlGenerator->generate('app_profile_index', ['id' => $user->getId(),
-        ]));
+            return new RedirectResponse($this->urlGenerator->generate('app_profile_index'));
         }
 
     }

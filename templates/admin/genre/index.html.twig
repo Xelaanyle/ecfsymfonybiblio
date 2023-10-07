@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Genre index</h1>
 
+    <a href="{{ path('app_admin_genre_new') }}">Nouveau Genre</a>
     <table >
         <thead>
             <tr>
@@ -21,8 +22,8 @@
                 <td>{{ genre.nom }}</td>
                 <td>{{ genre.description }}</td>
                 <td>
-                    <a href="{{ path('app_admin_genre_show', {'id': genre.id}) }}">show</a>
-                    <a href="{{ path('app_admin_genre_edit', {'id': genre.id}) }}">edit</a>
+                    <a href="{{ path('app_admin_genre_show', {'id': genre.id}) }}">Voir</a>
+                    <a href="{{ path('app_admin_genre_edit', {'id': genre.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +34,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_genre_new') }}">Create new</a>
+
 {% endblock %}

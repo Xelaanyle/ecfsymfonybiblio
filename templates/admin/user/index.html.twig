@@ -13,7 +13,6 @@
 				<th>Id</th>
 				<th>Email</th>
 				<th>Roles</th>
-				<th>Password</th>
 				<th>Actif</th>
 				<th>actions</th>
 			</tr>
@@ -24,7 +23,6 @@
 					<td>{{ user.id }}</td>
 					<td>{{ user.email }}</td>
 					<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-					<td>{{ user.password }}</td>
 					<td>{{ user.actif ? 'Yes' : 'No' }}</td>
 					<td>
 						<a href="{{ path('app_admin_user_show', {'id': user.id}) }}">Voir</a>

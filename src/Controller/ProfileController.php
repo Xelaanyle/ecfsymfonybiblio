@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Livre;
+
 use App\Entity\User;
 use App\Entity\Emprunt;
-use App\Entity\Emprunteur;
+use App\Form\EmprunteurProfileType;
 use App\Repository\EmpruntRepository;
-use App\Repository\LivreRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -24,9 +25,8 @@ class ProfileController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
 
             $emprunts = $empruntRepository->findAll();
-
         } else {
-            
+
             /** @var User */
             $user = $this->getUser();
             $emprunteurId = $user->getEmprunteur()->getId();
@@ -42,14 +42,53 @@ class ProfileController extends AbstractController
     #[Route('/emprunt/{id}', name: 'app_profile_show', methods: ['GET'])]
     public function show(Emprunt $emprunt): Response
     {
+
+        $emprunteur = $emprunt->getEmprunteur();
+        /** @var User */
+        if ($emprunteur && $emprunteur->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         return $this->render('profile/show.html.twig', [
             'emprunt' => $emprunt,
         ]);
     }
 
+    #[Route('/emprunteur/{id}', name: 'app_profile_emprunteur_show', methods: ['GET'])]
+    public function showEmprunteur(User $user): Response
+    {
+
+        $this->filterSessionUser($user);
+
+        return $this->render('profile/emprunteur_show.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_profile_emprunteur_edit', methods: ['GET', 'POST'])]
+    public function editEmprunteur(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        $this->filterSessionUser($user);
+
+
+        $form = $this->createForm(EmprunteurProfileType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_profile_emprunteur_show', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('profile/emprunteur_edit.html.twig', [
+            'emprunteur' => $user,
+            'form' => $form,
+        ]);
+    }
+
     private function filterSessionUser(User $user)
     {
-        $sessionUser = $this->getUser();
+        $sessionUser = $this->getUser($user);
 
         if ($sessionUser != $user) {
             throw new AccessDeniedException();

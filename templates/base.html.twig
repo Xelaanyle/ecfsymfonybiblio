@@ -65,7 +65,7 @@
 												{% if 'ROLE_ADMIN' in app.user.roles %}
 													Administrateur
 												{% else %}
-													<a href="{{ path ('app_profile_index') }}">
+													<a href="{{ path ('app_profile_emprunteur_show', {'id': app.user.id}) }}">
 														{{ app.user.emprunteur.prenom }}
 														{{ app.user.emprunteur.nom }}</a>
 												{% endif %}

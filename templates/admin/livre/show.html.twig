@@ -1,38 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Livre{% endblock %}
+{% block title %}Livre
+{% endblock %}
 
 {% block body %}
-    <h1>Livre</h1>
+	<h1>Livre</h1>
 
-    <table >
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ livre.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ livre.titre }}</td>
-            </tr>
-            <tr>
-                <th>AnneeEdition</th>
-                <td>{{ livre.anneeEdition }}</td>
-            </tr>
-            <tr>
-                <th>NombrePage</th>
-                <td>{{ livre.nombrePage }}</td>
-            </tr>
-            <tr>
-                <th>CodeIsbn</th>
-                <td>{{ livre.codeIsbn }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<table>
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ livre.id }}</td>
+			</tr>
+			<tr>
+				<th>Titre</th>
+				<td>{{ livre.titre }}</td>
+			</tr>
+			<tr>
+				<th>AnneeEdition</th>
+				<td>{{ livre.anneeEdition }}</td>
+			</tr>
+			<tr>
+				<th>NombrePage</th>
+				<td>{{ livre.nombrePage }}</td>
+			</tr>
+			<tr>
+				<th>Disponibilité</th>
+				<td>
+					{% set today = "now"|date("Y-m-d") %}
+					{% set disponible = true %}
 
-    <a href="{{ path('app_admin_livre_index') }}">back to list</a>
+					{% for emprunt in livre.emprunts %}
+						{% if emprunt.dateRetour is not null and emprunt.dateRetour|date("Y-m-d") >= today %}
+							{% set disponible = false %}
+						{% endif %}
+					{% endfor %}
+					{% if disponible %}
+						Disponible
+					{% else %}
+						Indisponible
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th>Auteur</th>
+				{% if livre.auteur is not null %}
+					<td>{{ livre.auteur.nom }}
+						{{ livre.auteur.prenom }}</td>
+				{% else %}
+					<td>Aucune donnée</td>
+				{% endif %}
+			</tr>
+			<tr>
+				<th>CodeIsbn</th>
+				<td>{{ livre.codeIsbn }}</td>
+			</tr>
+		</tbody>
+	</table>
 
-    <a href="{{ path('app_admin_livre_edit', {'id': livre.id}) }}">edit</a>
+	<a href="{{ path('app_admin_livre_index') }}">retour</a>
 
-    {{ include('admin/livre/_delete_form.html.twig') }}
+	<a href="{{ path('app_admin_livre_edit', {'id': livre.id}) }}">modifié</a>
+
+	{{ include('admin/livre/_delete_form.html.twig') }}
 {% endblock %}

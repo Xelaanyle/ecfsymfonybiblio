@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use App\Entity\Emprunteur;
 use App\Form\EmprunteurType;
 use App\Repository\EmprunteurRepository;
@@ -10,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/admin/emprunteur')]
 class EmprunteurController extends AbstractController
@@ -77,5 +79,14 @@ class EmprunteurController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_emprunteur_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function filterSessionUser(User $user)
+    {
+        $sessionUser = $this->getUser();
+
+        if ($sessionUser != $user) {
+            throw new AccessDeniedException();
+        }
     }
 }

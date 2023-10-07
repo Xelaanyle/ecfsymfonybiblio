@@ -1,43 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Livre index{% endblock %}
+{% block title %}Livre index
+{% endblock %}
 
 {% block body %}
-    <h1>Livre index</h1>
+	<h1>Livre index</h1>
+	<a href="{{ path('app_admin_livre_new') }}">Nouveau Livre</a>
+	<table>
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Titre</th>
+				<th>AnneeEdition</th>
+				<th>NombrePage</th>
+				<th>CodeIsbn</th>
+				<th>actions</th>
+				<th>Disponible</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for livre in livres %}
+				<tr>
+					<td>{{ livre.id }}</td>
+					<td>{{ livre.titre }}</td>
+					<td>{{ livre.anneeEdition }}</td>
+					<td>{{ livre.nombrePage }}</td>
+					<td>{{ livre.codeIsbn }}</td>
+					<td>
+						{% set today = "now"|date("Y-m-d") %}
+						{% set disponible = true %}
 
-    <table >
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>AnneeEdition</th>
-                <th>NombrePage</th>
-                <th>CodeIsbn</th>
-                <th>actions</th>
-                {# <th>Disponible</th> #}
-            </tr>
-        </thead>
-        <tbody>
-        {% for livre in livres %}
-            <tr>
-                <td>{{ livre.id }}</td>
-                <td>{{ livre.titre }}</td>
-                <td>{{ livre.anneeEdition }}</td>
-                <td>{{ livre.nombrePage }}</td>
-                <td>{{ livre.codeIsbn }}</td>
-                {# <td>{{ livre.disponible ? 'Oui' : 'Non' }}</td> #}
-                <td>
-                    <a href="{{ path('app_admin_livre_show', {'id': livre.id}) }}">show</a>
-                    <a href="{{ path('app_admin_livre_edit', {'id': livre.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+						{% for emprunt in livre.emprunts %}
+							{% if emprunt.dateRetour is null or emprunt.dateRetour|date("Y-m-d") >= today %}
+								{% set disponible = false %}
+							{% endif %}
+						{% endfor %}
+						{% if disponible %}
+							Disponible
+						{% else %}
+							Indisponible
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('app_admin_livre_show', {'id': livre.id}) }}">Voir</a>
+						<a href="{{ path('app_admin_livre_edit', {'id': livre.id}) }}">Modifié</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <a href="{{ path('app_admin_livre_new') }}">Create new</a>
+
 {% endblock %}

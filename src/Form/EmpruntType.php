@@ -28,6 +28,7 @@ class EmpruntType extends AbstractType
                 DateType::class,
                 [
                     'widget' => 'single_text',
+                    'required' => false,
                 ]
             )
             ->add('livre', EntityType::class, [
