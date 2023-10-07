@@ -6,7 +6,7 @@
 {% block body %}
 	<h1>Emprunteur index</h1>
 	<a href="{{ path('app_admin_user_new_admin') }}">Crée un nouveau Admin</a>
-	<a href="{{ path('app_admin_user_new_emprunteur') }}">Crée un nouvelle Emprunteur</a>
+	<a href="{{ path('app_admin_user_new_emprunteur') }}">Crée un nouveau Emprunteur</a>
 	<table >
 		<thead>
 			<tr>
@@ -29,8 +29,8 @@
 					<td>{{ emprunteur.createdAt ? emprunteur.createdAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td>{{ emprunteur.updatedAt ? emprunteur.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td>
-						<a href="{{ path('app_admin_emprunteur_show', {'id': emprunteur.id}) }}">show</a>
-						<a href="{{ path('app_admin_emprunteur_edit', {'id': emprunteur.id}) }}">edit</a>
+						<a href="{{ path('app_admin_emprunteur_show', {'id': emprunteur.id}) }}">Voir</a>
+						<a href="{{ path('app_admin_emprunteur_edit', {'id': emprunteur.id}) }}">Modifier</a>
 					</td>
 				</tr>
 			{% else %}

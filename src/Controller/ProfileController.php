@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Emprunt;
 use App\Form\EmprunteurProfileType;
+use App\Form\UserPasswordType;
 use App\Repository\EmpruntRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,11 +78,30 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_profile_emprunteur_show', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_profile_emprunteur_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('profile/emprunteur_edit.html.twig', [
             'emprunteur' => $user,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/password', name: 'app_profile_emprunteur_password', methods: ['GET', 'POST'])]
+    public function password(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UserPasswordType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_profile_emprunteur_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('admin/user/edit.html.twig', [
+            'user' => $user,
             'form' => $form,
         ]);
     }

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EmprunteurRepository::class)]
 class Emprunteur
@@ -18,12 +19,18 @@ class Emprunteur
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 190)]
     #[ORM\Column(length: 190)]
     private ?string $nom = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 190)]
     #[ORM\Column(length: 190)]
     private ?string $prenom = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 20)]
     #[ORM\Column(length: 190)]
     private ?string $tel = null;
 

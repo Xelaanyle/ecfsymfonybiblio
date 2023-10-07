@@ -44,10 +44,12 @@
 			</tr>
 			<tr>
 				<th>Auteur</th>
-				<td>
-					{{ livre.auteur.prenom }}
-					{{ livre.auteur.nom }}
-				</td>
+				{% if livre.auteur is not null %}
+					<td>{{ livre.auteur.nom }}
+						{{ livre.auteur.prenom }}</td>
+				{% else %}
+					<td>Aucune donnée</td>
+				{% endif %}
 			</tr>
 			<tr>
 				<th>Genre</th>

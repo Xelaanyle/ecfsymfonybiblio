@@ -6,8 +6,12 @@ use App\Repository\LivreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LivreRepository::class)]
+#[UniqueEntity(fields: ['codeIsbn'], message: 'Il existe déjà un livre avec ce code ISBN')]
+#[UniqueEntity(fields: ['titre'], message: 'Il existe deja un livre avec ce titre')]
 class Livre
 {
     #[ORM\Id]
@@ -15,15 +19,20 @@ class Livre
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 190)]
     #[ORM\Column(length: 190)]
     private ?string $titre = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(nullable: true)]
     private ?int $anneeEdition = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private ?int $nombrePage = null;
 
+    #[Assert\Length(min: 13, max: 13)]
     #[ORM\Column(length: 190, nullable: true)]
     private ?string $codeIsbn = null;
 

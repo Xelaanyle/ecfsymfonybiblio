@@ -13,6 +13,7 @@
 				<th>Livre</th>
 				<th>DateEmprunt</th>
 				<th>DateRetour</th>
+				<th>Emprunteur</th>
 				<th>actions</th>
 			</tr>
 		</thead>
@@ -23,6 +24,7 @@
 					<td>{{ emprunt.livre.titre }}</td>
 					<td>{{ emprunt.dateEmprunt ? emprunt.dateEmprunt|date('Y-m-d H:i:s') : '' }}</td>
 					<td>{{ emprunt.dateRetour ? emprunt.dateRetour|date('Y-m-d H:i:s') : '' }}</td>
+					<td>{{ emprunt.emprunteur.nom }} {{ emprunt.emprunteur.prenom }}</td>
 					<td>
 						<a href="{{ path('app_admin_emprunt_show', {'id': emprunt.id}) }}">Voir</a>
 						<a href="{{ path('app_admin_emprunt_edit', {'id': emprunt.id}) }}">Modifier</a>

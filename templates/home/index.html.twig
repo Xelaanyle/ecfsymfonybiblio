@@ -19,11 +19,17 @@
 		<tbody>
 			{% for livre in livres %}
 				<tr>
-					<td><a href="{{ path('app_home_show', {'id': livre.id}) }}"> {{ livre.titre }} </a> </td>
 					<td>
-						{{ livre.auteur.prenom }}
-						{{ livre.auteur.nom }}
+						<a href="{{ path('app_home_show', {'id': livre.id}) }}">
+							{{ livre.titre }}
+						</a>
 					</td>
+					{% if livre.auteur is not null %}
+						<td>{{ livre.auteur.nom }}
+							{{ livre.auteur.prenom }}</td>
+					{% else %}
+						<td>Aucune donnée</td>
+					{% endif %}
 					<td>{{ livre.anneeEdition }}</td>
 					<td>{{ livre.nombrePage }}</td>
 					<td>
@@ -41,11 +47,12 @@
 							Indisponible
 						{% endif %}
 					</td>
-			{% else %}
-				<tr>
-					<td colspan="6">Aucune donnée</td>
-				</tr>
-			{% endfor %}
+				{% else %}
+					<tr>
+						<td colspan="6">Aucune donnée</td>
+					</tr>
+				{% endfor %}
+			</tbody>
 		</tbody>
 	</table>
 {% endblock %}

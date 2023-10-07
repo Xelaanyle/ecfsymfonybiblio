@@ -19,7 +19,7 @@
                 <td>{{ emprunt.dateEmprunt ? emprunt.dateEmprunt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ emprunt.dateRetour ? emprunt.dateRetour|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_profile_show', {'id': emprunt.id}) }}">show</a>
+                    <a href="{{ path('app_profile_show', {'id': emprunt.id}) }}">voir</a>
                 </td>
             </tr>
         {% else %}
