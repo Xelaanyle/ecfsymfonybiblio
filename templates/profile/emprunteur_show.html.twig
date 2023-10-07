@@ -8,10 +8,6 @@
     <table >
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ user.emprunteur.id }}</td>
-            </tr>
-            <tr>
                 <th>Nom</th>
                 <td>{{ user.emprunteur.nom }}</td>
             </tr>
@@ -23,10 +19,14 @@
                 <th>Tel</th>
                 <td>{{ user.emprunteur.tel }}</td>
             </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_profile_emprunteur_show', {'id': user.id}) }}">Retour</a>
+    <a href="{{ path('app_home_index', {'id': user.id}) }}">Retour</a>
 
     <a href="{{ path('app_profile_emprunteur_edit', {'id': user.id}) }}">Modifier</a>
 

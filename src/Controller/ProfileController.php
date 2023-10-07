@@ -100,8 +100,8 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile_emprunteur_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('admin/user/edit.html.twig', [
-            'user' => $user,
+        return $this->renderForm('profile/emprunteur_edit.html.twig', [
+            'emprunteur' => $user,
             'form' => $form,
         ]);
     }

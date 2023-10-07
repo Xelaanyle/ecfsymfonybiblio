@@ -51,6 +51,23 @@
 					<td>Aucune donnée</td>
 				{% endif %}
 			</tr>
+				<tr>
+					<th>Emprunteur</th>
+					{% set emprunteurActuel = null %}
+					{% if livre.emprunts is not null %}
+						{% for emprunt in livre.emprunts %}
+							{% if emprunt.dateRetour is null or emprunt.dateRetour|date("Y-m-d") >= "now"|date("Y-m-d") %}
+								{% set emprunteurActuel = emprunt.emprunteur %}
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					{% if emprunteurActuel is not null %}
+						<td>{{ emprunteurActuel.nom }}
+							{{ emprunteurActuel.prenom }}</td>
+					{% else %}
+						<td>Aucun emprunt</td>
+					{% endif %}
+				</tr>
 			<tr>
 				<th>CodeIsbn</th>
 				<td>{{ livre.codeIsbn }}</td>

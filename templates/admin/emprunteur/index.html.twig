@@ -31,6 +31,7 @@
 					<td>
 						<a href="{{ path('app_admin_emprunteur_show', {'id': emprunteur.id}) }}">Voir</a>
 						<a href="{{ path('app_admin_emprunteur_edit', {'id': emprunteur.id}) }}">Modifier</a>
+						<a href="{{ path('app_admin_user_password', {'id': emprunteur.user.id}) }}">Changer mot de passe</a>
 					</td>
 				</tr>
 			{% else %}

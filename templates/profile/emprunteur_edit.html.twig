@@ -7,7 +7,5 @@
 
     {{ include('admin/emprunteur/_form.html.twig', {'button_label': 'Mise a jour'}) }}
 
-    <a href="{{ path('app_admin_emprunteur_index') }}"> Retour</a>
-
-    {{ include('admin/emprunteur/_delete_form.html.twig') }}
+    <a href="{{ path('app_profile_emprunteur_show', {'id': emprunteur.id}) }}"> Retour</a>
 {% endblock %}
